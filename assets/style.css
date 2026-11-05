@@ -1,0 +1,117 @@
+/* RE4 DLSS patch notes: dark by default, light on request (the toggle in the header) */
+:root,
+:root[data-theme="dark"] {
+  --bg: #0f1115;
+  --surface: #171a21;
+  --surface-2: #1e222b;
+  --text: #e4e7ec;
+  --muted: #9aa3b2;
+  --border: #2a303b;
+  --link: #8ab4f8;
+  --link-hover: #aecbfa;
+  --label: #c3cad6;
+  --code-bg: #1f2430;
+  --code-text: #e8d4a8;
+  --shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+  color-scheme: dark;
+}
+:root[data-theme="light"] {
+  --bg: #ffffff;
+  --surface: #f6f7f9;
+  --surface-2: #eceff3;
+  --text: #1c1f24;
+  --muted: #5b6472;
+  --border: #e1e5ea;
+  --link: #1a5fb4;
+  --link-hover: #144a8c;
+  --label: #3a414c;
+  --code-bg: #f0f2f5;
+  --code-text: #7a3e00;
+  --shadow: 0 4px 14px rgba(20, 30, 50, 0.14);
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 16px/1.65 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  overflow-wrap: break-word;
+}
+.wrap { max-width: 780px; margin: 0 auto; padding: 0 16px; }
+
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; border-radius: 4px; }
+
+.skip { position: absolute; left: -999px; top: 8px; background: var(--surface); padding: 6px 10px; border-radius: 6px; }
+.skip:focus { left: 8px; z-index: 10; }
+
+/* header */
+.site-header { background: var(--surface); border-bottom: 1px solid var(--border); }
+.header-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-top: 18px; padding-bottom: 18px; }
+.brand { min-width: 0; }
+.site-title { color: var(--text); font-size: 1.25rem; font-weight: 700; letter-spacing: -0.01em; }
+.site-title:hover { color: var(--text); text-decoration: none; }
+.site-desc { margin: 2px 0 0; color: var(--muted); font-size: 0.9rem; line-height: 1.45; }
+
+.theme-toggle {
+  flex: none;
+  display: inline-flex; align-items: center; gap: 6px;
+  min-height: 36px; padding: 6px 12px;
+  border: 1px solid var(--border); border-radius: 999px;
+  background: var(--surface-2); color: var(--text);
+  font: inherit; font-size: 0.875rem; cursor: pointer;
+}
+.theme-toggle:hover { border-color: var(--muted); }
+/* the icon shows the theme you switch to */
+:root[data-theme="dark"] .icon-moon,
+:root[data-theme="light"] .icon-sun { display: none; }
+
+/* notes */
+.content { padding-top: 8px; padding-bottom: 48px; }
+.content h1 { font-size: 1.9rem; line-height: 1.25; margin: 28px 0 12px; letter-spacing: -0.015em; }
+.content h2 {
+  font-size: 1.45rem; line-height: 1.3; margin: 44px 0 4px; padding-top: 20px;
+  border-top: 1px solid var(--border); scroll-margin-top: 16px;
+}
+.content h2 + p em { color: var(--muted); font-style: normal; font-size: 0.9rem; }
+/* "New", "Changed", "Fixed", "Known issues" in each version */
+.content h3 {
+  margin: 18px 0 4px;
+  color: var(--label); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+}
+.content ul { padding-left: 1.3em; margin: 6px 0 14px; }
+.content li { margin: 4px 0; }
+.content li::marker { color: var(--muted); }
+code {
+  font: 0.86em/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  background: var(--code-bg); color: var(--code-text);
+  padding: 0.1em 0.35em; border-radius: 4px; overflow-wrap: anywhere;
+}
+
+.site-footer { padding-top: 16px; padding-bottom: 40px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.85rem; }
+
+/* back to top: appears once you scroll down */
+.to-top {
+  position: fixed; right: 16px; bottom: 16px; z-index: 5;
+  width: 44px; height: 44px; display: grid; place-items: center;
+  border: 1px solid var(--border); border-radius: 50%;
+  background: var(--surface-2); color: var(--text); box-shadow: var(--shadow);
+  cursor: pointer; opacity: 0; visibility: hidden; transform: translateY(8px);
+  transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
+}
+.to-top.show { opacity: 1; visibility: visible; transform: none; }
+.to-top:hover { border-color: var(--muted); }
+
+@media (max-width: 520px) {
+  .header-row { align-items: flex-start; }
+  .site-desc { display: none; }
+  .content h1 { font-size: 1.6rem; }
+  .content h2 { font-size: 1.3rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .to-top { transition: none; }
+}

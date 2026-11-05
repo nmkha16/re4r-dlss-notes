@@ -1,7 +1,9 @@
 ---
-layout: page
+layout: default
 title: Patch notes
 ---
+
+# Patch notes
 
 RE4 DLSS is an REFramework plugin for **Resident Evil 4 (2023)**. It runs NVIDIA DLSS inside the engine, at the
 step where the game upscales, so the UI stays sharp at native resolution. It also offers optional DLSS Frame
@@ -17,7 +19,7 @@ Newest version first. Versions: [v0.3.4](#v034) · [v0.3.3](#v033) · [v0.3.2](#
 
 *Upcoming, in testing*
 
-**Changed**
+### Changed
 - Scope lenses and cutscene textures use the game's FSR 2 again by default (`IntegratedAllViews=0`), as in
   v0.1.4. DLSS on the scope views cost noticeably more fps than FSR 2 while aiming. Your `re4dlss.ini` is updated
   once (settings version 10; the old file is kept as `re4dlss.ini.v9.bak`). Set `IntegratedAllViews=1` under
@@ -26,7 +28,7 @@ Newest version first. Versions: [v0.3.4](#v034) · [v0.3.3](#v033) · [v0.3.2](#
 - Much less memory reserved at the main menu when some other graphics mods are installed (with one such setup it
   could reach several GB, a risk of out-of-memory crashes on PCs with a small page file).
 
-**Known issues**
+### Known issues
 - Heavy frame drops with the bio scope: the game draws the scope as extra views, separate from the main screen
   (the bio scope uses two: 512x512 and 1024x1024), and upscales each one on its own. With `IntegratedAllViews=1`,
   DLSS runs on every one of those views as well as the main screen: three DLSS passes per frame while the bio
@@ -42,14 +44,14 @@ Newest version first. Versions: [v0.3.4](#v034) · [v0.3.3](#v033) · [v0.3.2](#
 
 *2026-11-04*
 
-**Changed**
+### Changed
 - With `AllowUnknownSwapchainHooks=1`, frame generation also works next to more overlays and mods: the game's
   screen is recognised by its window and GPU, and Windows' own graphics library gets a second hook. Other frame
   generation tools (OptiScaler, DLSS Enabler) are refused instead of conflicting.
 - The log lists every DLL loaded into the game that isn't part of Windows, one per line, to help find
   conflicting mods.
 
-**Fixed**
+### Fixed
 - An error with dlssg_for_sm86 at high multipliers: the number of generated frames is always capped at what the
   card supports.
 
@@ -57,12 +59,12 @@ Newest version first. Versions: [v0.3.4](#v034) · [v0.3.3](#v033) · [v0.3.2](#
 
 *2026-11-04*
 
-**New**
+### New
 - `AllowUnknownSwapchainHooks` (under `[FrameGen]`, default 0): lets frame generation run on top of another mod
   that hooked the game's screen setup first. When frame generation is blocked, the log names that mod. Untested
   with most mods: it may crash or show a black screen.
 
-**Changed**
+### Changed
 - Settings version 9: older `re4dlss.ini` files are updated once with your values kept (old file kept as `.v7.bak`
   or `.v8.bak`).
 
@@ -70,12 +72,12 @@ Newest version first. Versions: [v0.3.4](#v034) · [v0.3.3](#v033) · [v0.3.2](#
 
 *2026-11-03*
 
-**New**
+### New
 - Works with MFG Unlocker (as `winmm.dll` next to `re4.exe`) as well as dlssg_for_sm86, for frame generation on
   RTX 20/30 cards and higher multipliers. Use only one of them.
 - 5x and 6x multipliers where the frame generation runtime offers them.
 
-**Changed**
+### Changed
 - A 16:9 image centred on a taller or wider screen (for example 2560x1440 on 2560x1600) now gets integrated DLSS
   and frame generation, with the black bars kept out of the generated frames.
 - ReShade (under any file name) is allowed with frame generation.
@@ -86,7 +88,7 @@ Newest version first. Versions: [v0.3.4](#v034) · [v0.3.3](#v033) · [v0.3.2](#
 
 *2026-11-03*
 
-**New**
+### New
 - DLSS Frame Generation (optional, off by default): tick **Enable frame generation** in the panel and restart the
   game. 2x on RTX 40, up to 4x on RTX 50; RTX 20/30 through dlssg_for_sm86. Needs the Streamline files in
   `reframework\plugins\re4dlss_fg`.
@@ -98,14 +100,14 @@ Newest version first. Versions: [v0.3.4](#v034) · [v0.3.3](#v033) · [v0.3.2](#
 
 *2026-11-02*
 
-**Changed**
+### Changed
 - Settings version 8: `Sharpness` is set to 0 once in existing files (other values kept, old file kept as
   `.v7.bak`).
 - When DLSS can't run, the panel says why in plain words (missing or misplaced `nvngx_dlss.dll`, old driver, no RTX
   GPU), and the mod stays idle for the session.
 - Less memory used once integrated DLSS runs.
 
-**Fixed**
+### Fixed
 - DLAA in the character model viewer: correct camera jitter on every model.
 - Integrated DLSS now also starts when FSR 2 is switched on in the game's settings after starting the game.
 
@@ -113,7 +115,7 @@ Newest version first. Versions: [v0.3.4](#v034) · [v0.3.3](#v033) · [v0.3.2](#
 
 *2026-11-01*
 
-**New**
+### New
 - Integrated DLSS (the new default): the engine gets its own DLSS step in place of FSR 2. The game's FSR 2 doesn't
   run at all, and DLSS takes its inputs straight from the engine. The older method stays available with
   `IntegratedDLSS=0`.
@@ -122,7 +124,7 @@ Newest version first. Versions: [v0.3.4](#v034) · [v0.3.3](#v033) · [v0.3.2](#
 - DLAA in the character model viewer, where the game uses plain TAA instead of its upscaler.
 - Sharpness slider (AMD's RCAS, the sharpening FSR 2 uses).
 
-**Changed**
+### Changed
 - `re4dlss.ini` is grouped into sections by method (settings version 7; old single-section files are kept as
   `.v6.bak`).
 
@@ -130,7 +132,7 @@ Newest version first. Versions: [v0.3.4](#v034) · [v0.3.3](#v033) · [v0.3.2](#
 
 *2026-11-01*
 
-**Changed**
+### Changed
 - Lower CPU cost in busy scenes.
 - The panel shows "No FSR 2 running here" in the main menu and the model viewer, where the game doesn't upscale.
 
@@ -138,7 +140,7 @@ Newest version first. Versions: [v0.3.4](#v034) · [v0.3.3](#v033) · [v0.3.2](#
 
 *2026-10-30*
 
-**Changed**
+### Changed
 - FSR 2's sharpening now runs on the DLSS image by default, since the image is soft without it and it costs no
   extra CPU. Older settings files are switched to `KeepFSR2Sharpening=1` once; set it to 0 for the softer, slightly
   faster look.
@@ -147,10 +149,10 @@ Newest version first. Versions: [v0.3.4](#v034) · [v0.3.3](#v033) · [v0.3.2](#
 
 *2026-10-29*
 
-**Fixed**
+### Fixed
 - DLSS sometimes never started.
 
-**Changed**
+### Changed
 - Lower CPU cost.
 - The panel tells you to set Upscaling to FSR 2 in the game's menu.
 
@@ -158,23 +160,23 @@ Newest version first. Versions: [v0.3.4](#v034) · [v0.3.3](#v033) · [v0.3.2](#
 
 *2026-10-29*
 
-**Changed**
+### Changed
 - The game's own FSR 2 passes are skipped while DLSS runs, so they cost nothing.
 - Lower overhead overall; the performance log is optional (off by default, a panel checkbox).
 - Preset E (the older CNN model) in the panel; the panel warns when a preset is missing from your
   `nvngx_dlss.dll`.
 
-**Fixed**
+### Fixed
 - A possible frozen image with `KeepFSR2Sharpening=0`.
 
 ## v0.1.1
 
 *2026-10-28*
 
-**Fixed**
+### Fixed
 - Heavy slowdowns in cutscenes that render a second view.
 
-**Changed**
+### Changed
 - DLSS only on the main screen; scope lenses and cutscene textures keep FSR 2.
 - Much lower CPU cost in busy scenes.
 - Keeps working with updated D3D12 runtimes.
