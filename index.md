@@ -7,6 +7,8 @@ RE4 DLSS is an REFramework plugin for **Resident Evil 4 (2023)**. It runs NVIDIA
 step where the game upscales, so the UI stays sharp at native resolution. It also offers optional DLSS Frame
 Generation with NVIDIA Reflex.
 
+**Download:** [RE4 DLSS on Nexus Mods](https://www.nexusmods.com/residentevil42023/mods/7795)
+
 Newest version first. Versions: [v0.3.4](#v034) · [v0.3.3](#v033) · [v0.3.2](#v032) · [v0.3.1](#v031) ·
 [v0.3.0](#v030) · [v0.2.1](#v021) · [v0.2.0](#v020) · [v0.1.5](#v015) · [v0.1.4](#v014) · [v0.1.3](#v013) ·
 [v0.1.2](#v012) · [v0.1.1](#v011) · [v0.1.0](#v010)
