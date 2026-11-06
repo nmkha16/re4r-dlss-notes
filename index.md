@@ -34,14 +34,17 @@ Newest version first. Versions: [v0.3.4](#v034) · [v0.3.3](#v033) · [v0.3.2](#
 - The experimental Bilinear scope mode is gone.
 
 ### NVIDIA Reflex (with frame generation)
-- **Reflex now follows NVIDIA's guidelines:** its sleep and timing markers run on the game's main thread, right before the game reads input, instead of after each frame is shown. Your input is read as late as possible, and DLSS frame generation now sees the game's real logic time, which should lower input latency and even out frame pacing. It moves to the main thread by itself a few seconds into the game (`Reflex now on the game's main thread` in the log) and back during loading. `ReflexOnGameThread=0` under `[FrameGen]` keeps the old behaviour. The latency gain has not been measured yet.
+- **Reflex now does its whole job.** Reflex cuts input lag in two ways: it keeps finished frames from piling up waiting for the GPU, and it delays the start of each new frame until just before it is needed, so the game reads your input as late as possible.
+  - **Before (v0.3.3 and older), only the first half worked.** The mod ran Reflex's wait on the render thread, right after each frame was shown. That still stopped frames from queuing up for the GPU, much like the driver's Low Latency Mode. But by then the game's main thread had already read your input and started simulating the next frame, so the wait could not hold it back: input stayed about a frame older than needed. Reflex's timing markers were also on the wrong thread, so Reflex and DLSS frame generation saw zero time for the game's logic, which weakened Reflex's own timing and frame generation's pacing.
+  - **Now:** the wait and the game-logic markers run on the game's main thread, right before it reads input, as NVIDIA's guidelines describe; the render and present markers stay on the render thread. Input is read as late as possible, and Reflex and frame generation get real timings. Expect lower input latency, typically up to about one more base frame when the GPU is the limit, and steadier frame pacing with frame generation.
+  - It moves to the main thread by itself a few seconds into the game (`Reflex now on the game's main thread` in the log) and back during loading. `ReflexOnGameThread=0` under `[FrameGen]` keeps the old behaviour. The latency gain has not been measured yet: PC Latency numbers from the NVIDIA overlay with `ReflexOnGameThread` at 1 and 0 are very welcome.
 - With frame generation, keep the game's own V-Sync off and use V-Sync from the NVIDIA settings instead: the log now says when the game presents with its own V-Sync on.
 
 ### Frame generation next to other mods
 - **`AllowUnknownSwapchainHooks` is now on by default:** frame generation also starts when another DLL (an overlay such as RTSS, or a wrapper other than ReShade or MFG Unlocker) hooks the game's display setup in front of the mod. Set it to `0` under `[FrameGen]` to keep frame generation off in that case. Other frame generation tools (OptiScaler, DLSS Enabler) still turn it off.
 
 ### Performance and stability
-- **Less CPU work per frame:** the mod reads the game's memory far less often on the render thread: about 25-30 reads per frame for the main screen instead of about 110, and 1 per scope view on FSR 2 instead of 12.
+- **Less CPU work per frame:** the mod reads the game's memory far less often on the render thread: about 25-30 reads per frame for the main screen (DLSS) instead of about 110, about 25 per scope view on DLSS instead of 60, and 1 per scope view on FSR 2 instead of 12.
 - **Less memory reserved at the menus:** with some other D3D12 mods installed, the mod could reserve many GB of memory at the menus before DLSS took over, a risk of out-of-memory crashes on PCs with a small page file. It now only commits what it uses.
 
 ### Panel
@@ -49,7 +52,6 @@ Newest version first. Versions: [v0.3.4](#v034) · [v0.3.3](#v033) · [v0.3.2](#
 - With frame generation on, choosing Reflex **On** no longer saves Off.
 
 ### Log
-- The second line of `re4dlss.log` says whether the game looks like the Steam release. Only the Steam release is supported; the mod runs the same either way.
 - When a scope stays on FSR 2 with DLSS chosen, the log says why, once per view.
 
 ### Settings update
@@ -62,7 +64,6 @@ New settings: `ReflexOnGameThread` (1) and `ExtraViewPreset` (-1, the same as th
 
 ### Known issues
 - **REFramework D2D plugin:** the released `reframework-d2d.dll` (needed by scripts such as *Damage Numbers*) crashes the game within seconds while frame generation is on. A fixed build of the plugin is available with the mod; otherwise remove `reframework\plugins\reframework-d2d.dll`, `reframework\autorun\reframework-d2d.lua` and the scripts that use it, or turn frame generation off.
-- **Bio scope thermal noise:** the bio scope's grainy thermal look is part of the game's effect and stays, also with the game's Film Grain off.
 - **One frame without generated frames** can happen when the inventory opens.
 
 **Having a problem?** Send `reframework\data\re4dlss\re4dlss.log` from your game folder right after it happens, since the log is reset every time the game starts. If the game crashes with frame generation, copy the log first, then set `FrameGen=0` under `[FrameGen]` in `reframework\data\re4dlss\re4dlss.ini`.
