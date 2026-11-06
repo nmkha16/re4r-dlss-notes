@@ -17,28 +17,55 @@ Newest version first. Versions: [v0.3.4](#v034) · [v0.3.3](#v033) · [v0.3.2](#
 
 ## v0.3.4
 
-*Upcoming, in testing*
+*2026-11-06*
 
-### Changed
-- Scope lenses and cutscene textures use the game's FSR 2 again by default (`IntegratedAllViews=0`), as in
-  v0.1.4. DLSS on the scope views cost noticeably more fps than FSR 2 while aiming. Your `re4dlss.ini` is updated
-  once (settings version 10; the old file is kept as `re4dlss.ini.v9.bak`). Set `IntegratedAllViews=1` under
-  `[Integrated]` to get DLSS on scopes again.
-- Lower CPU cost per frame: the mod reads the game's memory far fewer times each frame.
-- Much less memory reserved at the main menu when some other graphics mods are installed (with one such setup it
-  could reach several GB, a risk of out-of-memory crashes on PCs with a small page file).
+**Install / update:** extract this zip into the RE4 game folder and replace the existing files when asked. Your settings are kept, except the two changes listed under *Settings update*. New install? See the [README](https://www.nexusmods.com/residentevil42023/mods/7795).
+
+### What's new
+
+### Scopes (extra views)
+- **FSR 2 or DLSS for scopes, switched live:** the panel's **Extra-view upscaler (F10)** picks the game's FSR 2 or DLSS for scope lenses and cutscene textures. It applies immediately (no restart), **F10** switches it in game, and the choice is saved. While **F9** runs the game's FSR 2, the choice is greyed out: every view, scopes included, uses FSR 2 then.
+- **FSR 2 is the default for scopes again:** it costs less GPU time while a scope is up, and a user with an RTX 4070 Ti Super reported heavy stutter when aiming with DLSS on scopes. Pick DLSS for a sharper normal scope.
+- **Normal scope with DLSS skips the game's FSR 2 setup:** the game rebuilds its FSR 2 resources every time a scope is raised. With DLSS chosen, the mod skips that rebuild from the second raise of each scope on (the first raise still builds it while the mod learns the scope's camera). A scope that is up when you switch to FSR 2 or press F9 finishes on DLSS and gets FSR 2 on its next raise.
+- **The bio scope always uses the game's FSR 2:** the game renders the bio scope without camera jitter, so DLSS can't rebuild detail there (grass and foliage looked blurrier than with FSR 2) and would cost two extra DLSS runs. The mod now leaves it to the game's FSR 2 even with DLSS chosen. The jumping, blurry detail some saw with DLSS on the bio scope is gone with it.
+- **BioScopeFix stays on:** it still clears the main screen's DLSS history while the bio scope is up, which stops the heavy blur when sweeping the bio scope over foliage. It costs no fps.
+- **Extra-view preset:** with DLSS on scopes, a new **Extra-view preset** dropdown gives scopes their own DLSS model, for example the lighter E (CNN) on RTX 20/30 cards, while the main screen keeps its own preset. *Same as main* is the default.
+- **REFramework's Scope Interlaced Rendering:** with it on, the game draws the normal scope at half size, half of it each frame and without jitter. DLSS can't use that (it combs and shimmers), so the mod keeps such a scope on FSR 2. Turn Scope Interlaced Rendering off for DLSS on the normal scope.
+- The experimental Bilinear scope mode is gone.
+
+### NVIDIA Reflex (with frame generation)
+- **Reflex now follows NVIDIA's guidelines:** its sleep and timing markers run on the game's main thread, right before the game reads input, instead of after each frame is shown. Your input is read as late as possible, and DLSS frame generation now sees the game's real logic time, which should lower input latency and even out frame pacing. It moves to the main thread by itself a few seconds into the game (`Reflex now on the game's main thread` in the log) and back during loading. `ReflexOnGameThread=0` under `[FrameGen]` keeps the old behaviour. The latency gain has not been measured yet.
+- With frame generation, keep the game's own V-Sync off and use V-Sync from the NVIDIA settings instead: the log now says when the game presents with its own V-Sync on.
+
+### Frame generation next to other mods
+- **`AllowUnknownSwapchainHooks` is now on by default:** frame generation also starts when another DLL (an overlay such as RTSS, or a wrapper other than ReShade or MFG Unlocker) hooks the game's display setup in front of the mod. Set it to `0` under `[FrameGen]` to keep frame generation off in that case. Other frame generation tools (OptiScaler, DLSS Enabler) still turn it off.
+
+### Performance and stability
+- **Less CPU work per frame:** the mod reads the game's memory far less often on the render thread: about 25-30 reads per frame for the main screen instead of about 110, and 1 per scope view on FSR 2 instead of 12.
+- **Less memory reserved at the menus:** with some other D3D12 mods installed, the mod could reserve many GB of memory at the menus before DLSS took over, a risk of out-of-memory crashes on PCs with a small page file. It now only commits what it uses.
+
+### Panel
+- The extra-view upscaler and preset sit together, and the sharpness slider has its own label.
+- With frame generation on, choosing Reflex **On** no longer saves Off.
+
+### Log
+- The second line of `re4dlss.log` says whether the game looks like the Steam release. Only the Steam release is supported; the mod runs the same either way.
+- When a scope stays on FSR 2 with DLSS chosen, the log says why, once per view.
+
+### Settings update
+On first start, `re4dlss.ini` is updated once to settings version 11. Your values are kept and the old file is saved next to it (for example `re4dlss.ini.v10.bak`), with two exceptions:
+- `IntegratedAllViews` is set to `0`: scopes start on the game's FSR 2. Press **F10** or use the panel to go back to DLSS.
+- `AllowUnknownSwapchainHooks` is set to `1`.
+New settings: `ReflexOnGameThread` (1) and `ExtraViewPreset` (-1, the same as the main preset).
+
+**Tested on:** an RTX 3060 at 1920x1080 with DLSS 310.9.1, frame generation 2x to 6x with MFG Unlocker, normal and bio scopes on FSR 2 and DLSS, live switching with F9 and F10.
 
 ### Known issues
-- Heavy frame drops with the bio scope: the game draws the scope as extra views, separate from the main screen
-  (the bio scope uses two: 512x512 and 1024x1024), and upscales each one on its own. With `IntegratedAllViews=1`,
-  DLSS runs on every one of those views as well as the main screen: three DLSS passes per frame while the bio
-  scope is up, which costs more than the game's FSR 2 on the scope views, and starting DLSS for them can cause a
-  hitch. Fix: in `reframework\data\re4dlss\re4dlss.ini`, set `IntegratedAllViews=0` under `[Integrated]` (the
-  default from this version), so the scope views use the game's FSR 2 and only the main screen gets DLSS. Then
-  open the REFramework menu (Insert), turn on Scope Tweaks and enable interlaced rendering for the scope, which
-  lowers the cost of drawing it.
-- REFramework D2D crashes the game with frame generation on: it only has room for 4 screen buffers, and frame
-  generation uses 6. A patched build of REFramework D2D that sizes them by the real count is available.
+- **REFramework D2D plugin:** the released `reframework-d2d.dll` (needed by scripts such as *Damage Numbers*) crashes the game within seconds while frame generation is on. A fixed build of the plugin is available with the mod; otherwise remove `reframework\plugins\reframework-d2d.dll`, `reframework\autorun\reframework-d2d.lua` and the scripts that use it, or turn frame generation off.
+- **Bio scope thermal noise:** the bio scope's grainy thermal look is part of the game's effect and stays, also with the game's Film Grain off.
+- **One frame without generated frames** can happen when the inventory opens.
+
+**Having a problem?** Send `reframework\data\re4dlss\re4dlss.log` from your game folder right after it happens, since the log is reset every time the game starts. If the game crashes with frame generation, copy the log first, then set `FrameGen=0` under `[FrameGen]` in `reframework\data\re4dlss\re4dlss.ini`.
 
 ## v0.3.3
 
