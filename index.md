@@ -37,14 +37,12 @@ Newest version first. Versions: [v0.3.5](#v035) · [v0.3.4](#v034) · [v0.3.3](#
   - With `AllowUnknownSwapchainHooks=1` (the default) and Streamline's own function not found, the mod hooks the other mod's function instead, unless that function also handles other calls.
 
 ### Log
-- A few one-time lines while DLSS starts, to find a rare hang at the title screen (see *Known issues*).
+- A few one-time lines while DLSS starts, so a problem at start-up shows the step it stopped at.
 - With the performance log on, a new line every 5 seconds gives the 1% low fps, the worst frame time and where Reflex runs.
 
 **Tested on:** an RTX 3060 at 1920x1080 with DLSS 310.9.1 and frame generation 4x and 6x with MFG Unlocker; Reflex on the main thread and the render thread, switched live; sharpness from 0 to 1. The fix for other mods taking over the present step has not been seen in a real log yet: logs from setups with RenoDX add-ons are very welcome.
 
 ### Known issues
-- **RenoDX's "DLSS 5 Neural Rendering" add-on (`renodx-dlss5.addon64`)** stops this mod's DLSS from starting (`DLSS: CreateFeature ... -> 0xbad00007` in the log), so frame generation has nothing to work with. Use either that add-on or this mod's DLSS for now.
-- **Rare hang at the title screen:** twice in about 10 starts in testing, the game stopped right after starting, before DLSS started. Close it and start the game again. If it happens, please send the log: the new start-up lines show where it stopped.
 - **REFramework D2D plugin:** the released `reframework-d2d.dll` (needed by scripts such as *Damage Numbers*) crashes the game within seconds while frame generation is on. A fixed build of the plugin is available with the mod; otherwise remove `reframework\plugins\reframework-d2d.dll`, `reframework\autorun\reframework-d2d.lua` and the scripts that use it, or turn frame generation off.
 - **One frame without generated frames** can happen when the inventory opens.
 
