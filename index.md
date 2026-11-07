@@ -11,9 +11,45 @@ Generation with NVIDIA Reflex.
 
 **Download:** [RE4 DLSS on Nexus Mods](https://www.nexusmods.com/residentevil42023/mods/7795)
 
-Newest version first. Versions: [v0.3.5](#v035) · [v0.3.4](#v034) · [v0.3.3](#v033) · [v0.3.2](#v032) ·
-[v0.3.1](#v031) · [v0.3.0](#v030) · [v0.2.1](#v021) · [v0.2.0](#v020) · [v0.1.5](#v015) · [v0.1.4](#v014) ·
-[v0.1.3](#v013) · [v0.1.2](#v012) · [v0.1.1](#v011) · [v0.1.0](#v010)
+Newest version first. Versions: [v0.4.0](#v040) · [v0.3.5](#v035) · [v0.3.4](#v034) · [v0.3.3](#v033) ·
+[v0.3.2](#v032) · [v0.3.1](#v031) · [v0.3.0](#v030) · [v0.2.1](#v021) · [v0.2.0](#v020) · [v0.1.5](#v015) ·
+[v0.1.4](#v014) · [v0.1.3](#v013) · [v0.1.2](#v012) · [v0.1.1](#v011) · [v0.1.0](#v010)
+
+## v0.4.0
+
+*2026-11-07*
+
+**Install / update:** extract this zip into the RE4 game folder and replace the existing files when asked. Your settings are kept: the settings file gets a new `[DLSS5]` section once, and the old file is saved next to it as `re4dlss.ini.v12.bak`. New install? See the [README](https://www.nexusmods.com/residentevil42023/mods/7795).
+
+### What's new
+
+### DLSS 5 (experimental)
+- **New: NVIDIA DLSS 5 (DLSS Neural Rendering), built into the mod.** It reworks lighting, materials and skin. It's off by default: tick **Enable DLSS 5** on the panel's DLSS 5 page, or press **F11** in game.
+- **You need `nvngx_dlssnr.dll`.** It is not included, and NVIDIA has no public download for it; community DLSS 5 loaders ship it. Only use a copy from a source you trust. Put it in `reframework\plugins\re4dlss_nr\` (create the folder) or next to `re4.exe`.
+- **Works with frame generation, ReShade and overlays.** DLSS 5 runs inside the mod, with no extra swapchain or Present hooks. The HUD is never filtered, and frame generation gets the filtered image.
+- **Runs:** *After post-processing (before HUD)*, the default, filters the game's finished picture right before the HUD is drawn: that is the look DLSS 5 was trained on, and the strongest. *Before post-processing (at upscaling)* runs right after DLSS, so the game's bloom, grading and tone mapping soften it. With HDR output it falls back to before post-processing by itself.
+- **Settings:** Style (Default, Natural, Cinematic; Cinematic by default), Model preset and Intensity, plus:
+  - **Look:** Local tone, Local structure, Skin (0 to 2), Auto mask, Effect boost and Color strength (0 keeps the game's colours).
+  - **Resolution** (50% to 100%): lower is much faster. Only DLSS 5's change is upscaled, so the image's own detail stays at full resolution.
+  - **Multi Layers** (1x to 5x): DLSS 5 runs again on its own result for a stronger effect. Each layer costs the full GPU time again, so it is meant for RTX 50 cards.
+  - **Reset DLSS 5 settings** puts every DLSS 5 setting back to its default.
+- **New: per-area strength.** How strong DLSS 5 is on the **Sky**, on what is **Near** and what is **Far** (distances in meters from the game's camera, blended in between), on **Characters** as the game itself marks them, and on **Hair** (the game's own hair mask, likely needs the Hair Strands option). All at 1 changes nothing. **Debug → Show the area mask** shows where each strength applies.
+- **Debug → Show only DLSS 5's change** turns the picture grey wherever DLSS 5 changed nothing, to see where and how strongly it acts.
+- **Cost:** DLSS 5 is heavy on cards before RTX 50: about 57 ms of GPU time per frame at 1920x1080 on an RTX 3060. Intensity 0 does **not** make it cheaper; a lower Resolution does. The panel shows the measured GPU time.
+
+### Panel
+- **New: a summary at the top.** One line shows the DLSS mode, the resolutions, the preset, frame generation and Reflex latency; a second line shows DLSS 5 and its GPU time. The latency is the time from the game starting a frame to the GPU finishing it, averaged from Reflex's report. It's not the full click-to-screen time. It appears while frame generation runs with **Reflex timing** on *Game main thread* (the default): on the render thread, Reflex's report would leave out the game logic. It is only read while the menu is open.
+- **Two pages:** **DLSS** (Super Resolution and Frame Generation) and **DLSS 5**, with Tools below both. The last page you opened is remembered. Hover a setting for an explanation.
+- **Renamed:** *Extra-view upscaler* and *Extra-view preset* are now **Scopes upscaler** and **Scopes preset**. They work as before: they set the normal scope's picture and cutscene textures, and the bio scope keeps the game's FSR 2.
+
+**Tested on:** an RTX 3060 at 1920x1080 with DLSS 310.9.1 and frame generation 2x; DLSS 5 before and after post-processing, in gameplay, cutscenes, menus and scopes; per-area strength with sky, near, far and characters. Not tested yet: Multi Layers above 1x (it needs an RTX 50 card to be playable), Hair with the game's Hair Strands option off, and HDR output with DLSS 5. Reports from RTX 50 owners are very welcome.
+
+### Known issues
+- **DLSS 5 filters the main screen only:** not the picture inside scopes, cutscene textures or the character model viewer. Per-area strength treats a scope's picture as one surface (the lens), so characters seen through a scope don't get their own strength.
+- **REFramework D2D plugin:** the released `reframework-d2d.dll` (needed by scripts such as *Damage Numbers*) crashes the game within seconds while frame generation is on. A fixed build of the plugin is available with the mod; otherwise remove `reframework\plugins\reframework-d2d.dll`, `reframework\autorun\reframework-d2d.lua` and the scripts that use it, or turn frame generation off.
+- **One frame without generated frames** can happen when the inventory opens.
+
+**Having a problem?** Send `reframework\data\re4dlss\re4dlss.log` from your game folder right after it happens, since the log is reset every time the game starts. If DLSS 5 doesn't start, the panel's DLSS 5 line says why. If the game crashes with frame generation, copy the log first, then set `FrameGen=0` under `[FrameGen]` in `reframework\data\re4dlss\re4dlss.ini`.
 
 ## v0.3.5
 
