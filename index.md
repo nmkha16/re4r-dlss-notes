@@ -11,9 +11,44 @@ Generation with NVIDIA Reflex.
 
 **Download:** [RE4 DLSS on Nexus Mods](https://www.nexusmods.com/residentevil42023/mods/7795)
 
-Newest version first. Versions: [v0.3.4](#v034) · [v0.3.3](#v033) · [v0.3.2](#v032) · [v0.3.1](#v031) ·
-[v0.3.0](#v030) · [v0.2.1](#v021) · [v0.2.0](#v020) · [v0.1.5](#v015) · [v0.1.4](#v014) · [v0.1.3](#v013) ·
-[v0.1.2](#v012) · [v0.1.1](#v011) · [v0.1.0](#v010)
+Newest version first. Versions: [v0.3.5](#v035) · [v0.3.4](#v034) · [v0.3.3](#v033) · [v0.3.2](#v032) ·
+[v0.3.1](#v031) · [v0.3.0](#v030) · [v0.2.1](#v021) · [v0.2.0](#v020) · [v0.1.5](#v015) · [v0.1.4](#v014) ·
+[v0.1.3](#v013) · [v0.1.2](#v012) · [v0.1.1](#v011) · [v0.1.0](#v010)
+
+## v0.3.5
+
+*2026-11-07*
+
+**Install / update:** extract this zip into the RE4 game folder and replace the existing files when asked. Your settings are kept: there is no settings update in this version. New install? See the [README](https://www.nexusmods.com/residentevil42023/mods/7795).
+
+### What's new
+
+### Smoother frame generation with Reflex on the game's main thread
+- **Fixed: frame generation could get choppier in v0.3.4.** With Reflex on the game's main thread (the default since v0.3.4), the mod checks that every shown frame is matched with the right game frame. That check took the game's normal timing in gameplay (finishing a frame ahead while the GPU is busy) for a lost frame, after comparing it with the menus. It then skipped a real frame, the frames were matched one off, and Reflex switched back and forth between threads several times. You could feel it as stutter and lower fps lows.
+  - In a test on an RTX 3060, once v0.3.4's check misfired, the 1% low fps dropped from about 50 to 38 and the worst frames rose to about 36 ms. The fixed check ran for minutes on the main thread without a single skip.
+  - If you set `ReflexOnGameThread=0` because v0.3.4 felt choppy, try it on again.
+- **New: Reflex timing in the panel.** Under *NVIDIA Reflex*, **Reflex timing** picks **Game main thread** (the default) or **Render thread** (how v0.3.3 and older ran it). It applies right away and is saved. The line below it shows where Reflex runs right now: on the main thread it only moves there once the game's frames are confirmed to match, a few seconds into the game.
+
+### Sharpening
+- **Fixed: sparkling highlights with sharpness above 0.** Small bright spots (sparks, wet or metal surfaces, specular glints) could turn into very bright flickering pixels, more so above about 0.35. The sharpening now keeps every pixel close to the brightness around it. Edges still get sharper across the whole slider.
+
+### Frame generation next to other mods
+- **Fixed: "Streamline's Present could not be hooked: frame generation stays off"** when another mod (for example a RenoDX ReShade add-on) had taken over the game's present step on Streamline's swapchain. The mod now hooks Streamline's own function behind it, so both keep working.
+  - With `AllowUnknownSwapchainHooks=1` (the default) and Streamline's own function not found, the mod hooks the other mod's function instead, unless that function also handles other calls.
+
+### Log
+- A few one-time lines while DLSS starts, to find a rare hang at the title screen (see *Known issues*).
+- With the performance log on, a new line every 5 seconds gives the 1% low fps, the worst frame time and where Reflex runs.
+
+**Tested on:** an RTX 3060 at 1920x1080 with DLSS 310.9.1 and frame generation 4x and 6x with MFG Unlocker; Reflex on the main thread and the render thread, switched live; sharpness from 0 to 1. The fix for other mods taking over the present step has not been seen in a real log yet: logs from setups with RenoDX add-ons are very welcome.
+
+### Known issues
+- **RenoDX's "DLSS 5 Neural Rendering" add-on (`renodx-dlss5.addon64`)** stops this mod's DLSS from starting (`DLSS: CreateFeature ... -> 0xbad00007` in the log), so frame generation has nothing to work with. Use either that add-on or this mod's DLSS for now.
+- **Rare hang at the title screen:** twice in about 10 starts in testing, the game stopped right after starting, before DLSS started. Close it and start the game again. If it happens, please send the log: the new start-up lines show where it stopped.
+- **REFramework D2D plugin:** the released `reframework-d2d.dll` (needed by scripts such as *Damage Numbers*) crashes the game within seconds while frame generation is on. A fixed build of the plugin is available with the mod; otherwise remove `reframework\plugins\reframework-d2d.dll`, `reframework\autorun\reframework-d2d.lua` and the scripts that use it, or turn frame generation off.
+- **One frame without generated frames** can happen when the inventory opens.
+
+**Having a problem?** Send `reframework\data\re4dlss\re4dlss.log` from your game folder right after it happens, since the log is reset every time the game starts. If the game crashes with frame generation, copy the log first, then set `FrameGen=0` under `[FrameGen]` in `reframework\data\re4dlss\re4dlss.ini`.
 
 ## v0.3.4
 
