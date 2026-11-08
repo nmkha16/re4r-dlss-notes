@@ -25,6 +25,8 @@ Newest version first. Versions: [v0.4.1](#v041) · [v0.4.0](#v040) · [v0.3.5](#
 
 ### DLSS 5
 - **"After post-processing" now works with HDR output.** In v0.4.0, with HDR on, DLSS 5 couldn't find the game's finished picture and fell back to *before post-processing* (the panel said "post-processed image not found"). It now runs after post-processing in an HDR mode, and the panel says **after post-processing (HDR)**. DLSS 5 still doesn't touch the HUD (health, ammo, prompts): it runs before the game draws it.
+- **Fixed: "After post-processing" didn't work at native resolution (DLAA).** DLSS 5's effect was lost, or it fell back to *before post-processing*. It now works at native resolution too.
+- **Also fixed for 10-bit SDR.** On screens that report 10-bit colour, the game can output a 10-bit picture even with HDR off, and v0.4.0 fell back to *before post-processing* there too. It now works, and the panel says **after post-processing (10-bit output)**.
 - Tested with HDR on a virtual HDR display, not yet on a real HDR screen: reports from HDR players are very welcome.
 
 ### Frame generation
@@ -32,17 +34,16 @@ Newest version first. Versions: [v0.4.1](#v041) · [v0.4.0](#v040) · [v0.3.5](#
   - turn V-Sync off and use G-Sync, and remove any other fps cap (the NVIDIA Max Frame Rate setting, RTSS): the Target fps slider is the cap
   - it's best on high refresh rate screens (240 Hz and up)
   - where the driver has no dynamic mode, frame generation uses NVIDIA's Auto mode with your multiplier instead
-- **Fixed: frame generation got no HUD-free image with ReShade or MFG Unlocker installed.** The mod gives frame generation a copy of each frame without the HUD, which helps keep the HUD steady in generated frames. With ReShade or MFG Unlocker installed, that copy was made but never handed over. Some HUD smearing can still show at high multipliers (4x to 6x): the copy helps frame generation tell the HUD apart, it doesn't lay the HUD over the generated frames.
 - With HDR output, frame generation works as before, without the HUD-free image.
 
 ### Scopes
-- **New: Bio scope upscaler.** The bio (infrared) scope can now use DLSS too (panel: **Bio scope upscaler**, FSR 2 by default). The game renders it without the camera jitter DLSS works best with, so DLSS has less to work with there and costs two extra DLSS runs while the scope is up.
+- **New: Bio scope upscaler.** The bio (infrared) scope can now use DLSS too (panel: **Bio scope upscaler**, FSR 2 by default). The game renders it without the camera jitter DLSS works best with, so DLSS has less to work with there and costs two extra DLSS runs while the scope is up. When DLSS is chosen, the panel says so under the setting.
 - **F10 is gone:** scope upscalers are switched from the panel only.
 
 ### Other
 - The log names the screen output's format at start-up (`screen output: ... format N`), which shows at a glance whether the game runs in HDR.
 
-**Tested on:** an RTX 3060 at 1920x1080 with frame generation through MFG Unlocker (2x to 6x), ReShade loaded; DLSS 5 after post-processing in SDR and with HDR on a virtual HDR display. Not tested yet: dynamic frame generation on RTX 40/50 cards, and DLSS 5 on a real HDR screen.
+**Tested on:** an RTX 3060 at 1920x1080 with frame generation through MFG Unlocker (2x to 6x), ReShade loaded; DLSS 5 after post-processing in SDR (DLAA and Quality) and with HDR on a virtual HDR display. Not tested yet: dynamic frame generation on RTX 40/50 cards, and DLSS 5 on a real HDR screen.
 
 ### Known issues
 - **Dynamic frame gen** on the RTX 3060 with MFG Unlocker settles on whole multipliers only (1x, 2x, 3x, 6x), and V-Sync forced in the NVIDIA settings makes it ignore the target.
