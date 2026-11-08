@@ -24,7 +24,7 @@ Newest version first. Versions: [v0.4.1](#v041) · [v0.4.0](#v040) · [v0.3.5](#
 ### What's new
 
 ### DLSS 5
-- **"After post-processing" now works with HDR output.** In v0.4.0, with HDR on, DLSS 5 couldn't find the game's finished picture and fell back to *before post-processing* (the panel said "post-processed image not found"). It now runs after post-processing in an HDR mode, and the panel says **after post-processing (HDR)**. The HUD is still never filtered.
+- **"After post-processing" now works with HDR output.** In v0.4.0, with HDR on, DLSS 5 couldn't find the game's finished picture and fell back to *before post-processing* (the panel said "post-processed image not found"). It now runs after post-processing in an HDR mode, and the panel says **after post-processing (HDR)**. DLSS 5 still doesn't touch the HUD (health, ammo, prompts): it runs before the game draws it.
 - Tested with HDR on a virtual HDR display, not yet on a real HDR screen: reports from HDR players are very welcome.
 
 ### Frame generation
