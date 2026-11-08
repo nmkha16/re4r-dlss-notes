@@ -11,9 +11,46 @@ Generation with NVIDIA Reflex.
 
 **Download:** [RE4 DLSS on Nexus Mods](https://www.nexusmods.com/residentevil42023/mods/7795)
 
-Newest version first. Versions: [v0.4.0](#v040) · [v0.3.5](#v035) · [v0.3.4](#v034) · [v0.3.3](#v033) ·
-[v0.3.2](#v032) · [v0.3.1](#v031) · [v0.3.0](#v030) · [v0.2.1](#v021) · [v0.2.0](#v020) · [v0.1.5](#v015) ·
-[v0.1.4](#v014) · [v0.1.3](#v013) · [v0.1.2](#v012) · [v0.1.1](#v011) · [v0.1.0](#v010)
+Newest version first. Versions: [v0.4.1](#v041) · [v0.4.0](#v040) · [v0.3.5](#v035) · [v0.3.4](#v034) ·
+[v0.3.3](#v033) · [v0.3.2](#v032) · [v0.3.1](#v031) · [v0.3.0](#v030) · [v0.2.1](#v021) · [v0.2.0](#v020) ·
+[v0.1.5](#v015) · [v0.1.4](#v014) · [v0.1.3](#v013) · [v0.1.2](#v012) · [v0.1.1](#v011) · [v0.1.0](#v010)
+
+## v0.4.1
+
+*2026-11-08*
+
+**Install / update:** extract this zip into the RE4 game folder and replace the existing files when asked. Your settings are kept, and the new settings start at their defaults. New install? See the [README](https://www.nexusmods.com/residentevil42023/mods/7795).
+
+### What's new
+
+### DLSS 5
+- **"After post-processing" now works with HDR output.** In v0.4.0, with HDR on, DLSS 5 couldn't find the game's finished picture and fell back to *before post-processing* (the panel said "post-processed image not found"). It now runs after post-processing in an HDR mode, and the panel says **after post-processing (HDR)**. The HUD is still never filtered.
+- Tested with HDR on a virtual HDR display, not yet on a real HDR screen: reports from HDR players are very welcome.
+
+### Frame generation
+- **New: Dynamic frame gen (experimental).** Under the frame multiplier, **Dynamic frame gen** lets NVIDIA's DLSS frame generation pick how many frames to generate for each rendered frame (up to 6x) to reach **Target fps** (0 = your screen's refresh rate), with Reflex capping the frame rate at the target. The multiplier isn't used then, even at Off. It shows when your setup can generate more than 2x. For it to work well:
+  - turn V-Sync off and use G-Sync, and remove any other fps cap (the NVIDIA Max Frame Rate setting, RTSS): the Target fps slider is the cap
+  - it's best on high refresh rate screens (240 Hz and up)
+  - where the driver has no dynamic mode, frame generation uses NVIDIA's Auto mode with your multiplier instead
+- **Fixed: frame generation got no HUD-free image with ReShade or MFG Unlocker installed.** The mod gives frame generation a copy of each frame without the HUD, which helps keep the HUD steady in generated frames. With ReShade or MFG Unlocker installed, that copy was made but never handed over. Some HUD smearing can still show at high multipliers (4x to 6x): the copy helps frame generation tell the HUD apart, it doesn't lay the HUD over the generated frames.
+- With HDR output, frame generation works as before, without the HUD-free image.
+
+### Scopes
+- **New: Bio scope upscaler.** The bio (infrared) scope can now use DLSS too (panel: **Bio scope upscaler**, FSR 2 by default). The game renders it without the camera jitter DLSS works best with, so DLSS has less to work with there and costs two extra DLSS runs while the scope is up.
+- **F10 is gone:** scope upscalers are switched from the panel only.
+
+### Other
+- The log names the screen output's format at start-up (`screen output: ... format N`), which shows at a glance whether the game runs in HDR.
+
+**Tested on:** an RTX 3060 at 1920x1080 with frame generation through MFG Unlocker (2x to 6x), ReShade loaded; DLSS 5 after post-processing in SDR and with HDR on a virtual HDR display. Not tested yet: dynamic frame generation on RTX 40/50 cards, and DLSS 5 on a real HDR screen.
+
+### Known issues
+- **Dynamic frame gen** on the RTX 3060 with MFG Unlocker settles on whole multipliers only (1x, 2x, 3x, 6x), and V-Sync forced in the NVIDIA settings makes it ignore the target.
+- **DLSS 5 filters the main screen only:** not the picture inside scopes, cutscene textures or the character model viewer.
+- **REFramework D2D plugin:** the released `reframework-d2d.dll` crashes the game within seconds while frame generation is on. A fixed build of the plugin is available with the mod; otherwise remove it, or turn frame generation off.
+- **One frame without generated frames** can happen when the inventory opens.
+
+**Having a problem?** Send `reframework\data\re4dlss\re4dlss.log` from your game folder right after it happens, since the log is reset every time the game starts. If the game crashes with frame generation, copy the log first, then set `FrameGen=0` under `[FrameGen]` in `reframework\data\re4dlss\re4dlss.ini`.
 
 ## v0.4.0
 
