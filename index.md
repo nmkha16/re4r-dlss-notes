@@ -29,15 +29,21 @@ Newest version first. Versions: [v0.4.2](#v042) · [v0.4.1](#v041) · [v0.4.0](#
 - **New: Custom.** Pick **Custom** in **DLSS mode** and a **Resolution** slider appears: any render resolution from 33% to 100% of your screen (100% = DLAA). It applies when you let go of the slider, with a short hitch while the game resizes. Your choice is kept.
 - The DLSS line at the top of the panel shows the percentage while Ultra Quality or Custom is on, for example **DLSS 77%: 1478x831 -> 1920x1080**.
 
+### Scopes
+- **Much less stutter when raising the bio scope.** With DLSS on the bio scope, every raise set up DLSS again for the scope's two pictures, which froze the game for a moment. The mod now reuses that setup, so only the first raise after starting the game does it. The normal scope gets the same fix.
+- **Scope textures are kept.** Each raise also made the game create the scope's render textures again. The mod now keeps them between raises so the game can reuse them, with FSR 2 or DLSS on the scopes. This uses some video memory; they are freed when you change resolution. To turn it off, set `ScopeTextureRetention=0` under `[Advanced]` in `reframework\data\re4dlss\re4dlss.ini`.
+- The panel's **Bio scope upscaler** now notes that it includes the scope lag fix, with FSR 2 or DLSS.
+
 ### Panel
 - **Clearer mode names.** The **Mode** line now reads **full** (the normal state) or **compatibility**. Compatibility mode is the fallback when the mod can't fully hook the game (another game version, or another mod that changes the game): DLSS still upscales, but frame generation, DLSS 5 and Sharpness are off, and the line says so. It replaces "integrated DLSS" and "FSR 2 replacement".
 - **Scope settings** (Scopes upscaler, Bio scope upscaler, Scopes preset) are now in a **Scope** section that opens and closes, like the groups on the DLSS 5 page.
 - **Sharpness** has a short note under it, and its tooltip says it works in full mode only.
 
-**Tested on:** an RTX 3060 at 1920x1080 with frame generation through MFG Unlocker: Ultra Quality (1478x831), Custom at 50% and 60%, and every existing mode; compatibility mode with `IntegratedDLSS=0`.
+**Tested on:** an RTX 3060 at 1920x1080 with frame generation through MFG Unlocker: Ultra Quality (1478x831), Custom at 50% and 60%, and every existing mode; compatibility mode with `IntegratedDLSS=0`. Bio scope with DLSS: the longest frame when raising it went from about 130 ms to 50-60 ms after the first raise.
 
 ### Known issues
 - **Ultra Quality and Custom** run DLSS in its Quality mode at your resolution, since this DLSS version has no Ultra Quality mode of its own. The image is upscaled from the resolution you picked as expected; only the mode name DLSS reports differs.
+- **Scopes still cost some speed:** raising one still takes one slower frame while the game sets up the scope's picture, and the frame rate stays lower while a scope is up (for example 69 to 57 fps on an RTX 3060), since the game draws the scope's view as well.
 - **DLSS 5 filters the main screen only:** not the picture inside scopes, cutscene textures or the character model viewer.
 - **REFramework D2D plugin:** the released `reframework-d2d.dll` crashes the game within seconds while frame generation is on. A fixed build of the plugin is available with the mod; otherwise remove it, or turn frame generation off.
 - **One frame without generated frames** can happen when the inventory opens.
