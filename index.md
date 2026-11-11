@@ -11,9 +11,39 @@ Generation with NVIDIA Reflex.
 
 **Download:** [RE4 DLSS on Nexus Mods](https://www.nexusmods.com/residentevil42023/mods/7795)
 
-Newest version first. Versions: [v0.4.1](#v041) · [v0.4.0](#v040) · [v0.3.5](#v035) · [v0.3.4](#v034) ·
-[v0.3.3](#v033) · [v0.3.2](#v032) · [v0.3.1](#v031) · [v0.3.0](#v030) · [v0.2.1](#v021) · [v0.2.0](#v020) ·
-[v0.1.5](#v015) · [v0.1.4](#v014) · [v0.1.3](#v013) · [v0.1.2](#v012) · [v0.1.1](#v011) · [v0.1.0](#v010)
+Newest version first. Versions: [v0.4.2](#v042) · [v0.4.1](#v041) · [v0.4.0](#v040) · [v0.3.5](#v035) ·
+[v0.3.4](#v034) · [v0.3.3](#v033) · [v0.3.2](#v032) · [v0.3.1](#v031) · [v0.3.0](#v030) · [v0.2.1](#v021) ·
+[v0.2.0](#v020) · [v0.1.5](#v015) · [v0.1.4](#v014) · [v0.1.3](#v013) · [v0.1.2](#v012) · [v0.1.1](#v011) ·
+[v0.1.0](#v010)
+
+## v0.4.2
+
+*2026-11-11*
+
+**Install / update:** extract this zip into the RE4 game folder and replace the existing files when asked. Your settings are kept, and the new settings start at their defaults. New install? See the [README](https://www.nexusmods.com/residentevil42023/mods/7795).
+
+### What's new
+
+### DLSS Super Resolution
+- **New: Ultra Quality (77%).** A new step between Quality (67%) and DLAA (100%) in **DLSS mode**: sharper than Quality, faster than DLAA. The game's own menu only goes up to Quality; the mod now sets the render resolution itself.
+- **New: Custom.** Pick **Custom** in **DLSS mode** and a **Resolution** slider appears: any render resolution from 33% to 100% of your screen (100% = DLAA). It applies when you let go of the slider, with a short hitch while the game resizes. Your choice is kept.
+- The DLSS line at the top of the panel shows the percentage while Ultra Quality or Custom is on, for example **DLSS 77%: 1478x831 -> 1920x1080**.
+
+### Panel
+- **Clearer mode names.** The **Mode** line now reads **full** (the normal state) or **compatibility**. Compatibility mode is the fallback when the mod can't fully hook the game (another game version, or another mod that changes the game): DLSS still upscales, but frame generation, DLSS 5 and Sharpness are off, and the line says so. It replaces "integrated DLSS" and "FSR 2 replacement".
+- **Scope settings** (Scopes upscaler, Bio scope upscaler, Scopes preset) are now in a **Scope** section that opens and closes, like the groups on the DLSS 5 page.
+- **Sharpness** has a short note under it, and its tooltip says it works in full mode only.
+
+**Tested on:** an RTX 3060 at 1920x1080 with frame generation through MFG Unlocker: Ultra Quality (1478x831), Custom at 50% and 60%, and every existing mode; compatibility mode with `IntegratedDLSS=0`.
+
+### Known issues
+- **Ultra Quality and Custom** run DLSS in its Quality mode at your resolution, since this DLSS version has no Ultra Quality mode of its own. The image is upscaled from the resolution you picked as expected; only the mode name DLSS reports differs.
+- **DLSS 5 filters the main screen only:** not the picture inside scopes, cutscene textures or the character model viewer.
+- **REFramework D2D plugin:** the released `reframework-d2d.dll` crashes the game within seconds while frame generation is on. A fixed build of the plugin is available with the mod; otherwise remove it, or turn frame generation off.
+- **One frame without generated frames** can happen when the inventory opens.
+- **Dynamic frame gen** on the RTX 3060 with MFG Unlocker settles on whole multipliers only (1x, 2x, 3x, 6x), and V-Sync forced in the NVIDIA settings makes it ignore the target.
+
+**Having a problem?** Send `reframework\data\re4dlss\re4dlss.log` from your game folder right after it happens, since the log is reset every time the game starts. If the panel says **Mode: compatibility**, the log says why. If the game crashes with frame generation, copy the log first, then set `FrameGen=0` under `[FrameGen]` in `reframework\data\re4dlss\re4dlss.ini`.
 
 ## v0.4.1
 
