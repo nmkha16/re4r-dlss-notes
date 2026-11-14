@@ -11,10 +11,68 @@ Generation with NVIDIA Reflex.
 
 **Download:** [RE4 DLSS on Nexus Mods](https://www.nexusmods.com/residentevil42023/mods/7795)
 
-Newest version first. Versions: [v0.4.2](#v042) · [v0.4.1](#v041) · [v0.4.0](#v040) · [v0.3.5](#v035) ·
-[v0.3.4](#v034) · [v0.3.3](#v033) · [v0.3.2](#v032) · [v0.3.1](#v031) · [v0.3.0](#v030) · [v0.2.1](#v021) ·
-[v0.2.0](#v020) · [v0.1.5](#v015) · [v0.1.4](#v014) · [v0.1.3](#v013) · [v0.1.2](#v012) · [v0.1.1](#v011) ·
-[v0.1.0](#v010)
+Newest version first. Versions: [v0.5.0](#v050) · [v0.4.2](#v042) · [v0.4.1](#v041) · [v0.4.0](#v040) ·
+[v0.3.5](#v035) · [v0.3.4](#v034) · [v0.3.3](#v033) · [v0.3.2](#v032) · [v0.3.1](#v031) · [v0.3.0](#v030) ·
+[v0.2.1](#v021) · [v0.2.0](#v020) · [v0.1.5](#v015) · [v0.1.4](#v014) · [v0.1.3](#v013) · [v0.1.2](#v012) ·
+[v0.1.1](#v011) · [v0.1.0](#v010)
+
+## v0.5.0
+
+*2026-11-14*
+
+**Install / update:** extract this zip into the RE4 game folder and replace the existing files when asked. Your settings are kept, and the new settings start at their defaults (see *Settings* below for two that are reset once). New install? See the [README](https://www.nexusmods.com/residentevil42023/mods/7795).
+
+### What's new
+
+### Frame generation
+- **New: FSR3 frame generation.** AMD FidelityFX FSR 3.1.4 frame generation, 2x, on any DirectX 12 card. It works with DLSS or with the game's own FSR 2 as the upscaler. Choose it under **Frame Generation > Provider: FSR3 (AMD)**; it applies after a game restart. Reflex is not available with FSR3.
+- **Frame generation in HDR.** FSR3 now runs on HDR screens (HDR10 and scRGB), and both DLSS-G and FSR3 get a clean HUD in 10-bit output (HDR10 and 10-bit SDR): the mod rebuilds the game's final HDR conversion for its HUD-less image.
+- **DLSS-G multi frame generation gets the correct HUD-less image,** so the HUD no longer ghosts with preset C. Until now only preset B handled the HUD correctly.
+- **HUD-less image at any presentation size,** including a render size smaller than the screen and black bars.
+- **FSR3 pacing recovers** after switching DLSS 5, the upscaler or the render scale (the frame rate used to creep back slowly).
+- **DLSS 5 after post-processing and frame generation together in HDR:** the HUD stays clean with DLSS 5 on.
+
+### Upscaler
+- **AMD and Intel cards:** the mod detects a non-NVIDIA GPU at start and runs Game FSR 2 with FSR3 frame generation for that session. DLSS, DLSS-G and DLSS 5 are never loaded on it, and the panel disables their controls. Your saved choices stay in the settings file for an NVIDIA card.
+
+### Bio scope
+- **New: Bio Scope Lens fix (experimental, off by default, Fixes page).** The bio scope renders with camera jitter, and the main screen keeps its frame history with the thermal picture's own motion on the lens: sharper, and no smear when panning over foliage. Needs DLSS as the upscaler; works best with **Bio scope upscaler** on DLSS.
+- **New: Sharp bio scope reticle (on with the lens fix).** The game's reticle is part of the lens picture, so with the lens fix it ghosted while panning. The mod now hides it while the scope is up and draws it again at full resolution after upscaling, on top of frame generation's HUD layer. While raising and lowering, the game's own reticle shows and moves with the lens. Costs about 0.03 ms per frame while the bio scope is up (RTX 3060, 1080p to 4K).
+- **Scope stutter fix** is on the Fixes page and switches live.
+- Raising the bio scope with **Bio scope upscaler** on DLSS skips the game's FSR 2 setup for it.
+
+### Game updates
+- **The mod finds the game's code by signature** instead of fixed addresses, so a game patch that only moves code no longer turns features off.
+- **A mismatch turns off only the feature that needs it.** If a game update changes code or data that one feature uses, only that feature turns off: its control is greyed out in the panel with a yellow **(address mismatch)** label, and everything else keeps working. The mod falls back to compatibility mode (DLSS still upscales) only when the code full mode itself needs can't be found.
+
+### Performance
+- Less CPU work while recording DLSS and frame generation commands each frame, and faster DLSS 5 preprocessing.
+
+### Panel
+- **Pages: Main | DLSS 5 | Fixes.** The Upscaler leads Super Resolution, the frame generation provider moved into Frame Generation, and the bio scope and scope stutter fixes are on Fixes.
+- **Mode line** at the top: **Mode: Full**, **Compatibility**, **Starting** or **DLAA** while DLSS runs. If it says Compatibility, the reason is shown under Super Resolution.
+- The top line names the Game FSR 2 quality and the DLSS Custom percentage; the status under Upscaler shows only lines that need attention.
+- Panel changes are never applied twice: a change left on disk when the game closed is no longer replayed on the next launch.
+
+### Settings
+- Reset once when you update: **Bio Scope Lens fix** to off, and DLSS 5's **far area** strength to 0.4. Everything else is kept.
+
+**Tested on:** an RTX 3060 at 1920x1080, SDR and an HDR10 screen: DLSS-G 2x through MFG Unlocker and FSR3 2x, with DLSS and with Game FSR 2, live upscaler switches, DLSS 5 on and off; the bio scope with the lens fix and the redrawn reticle (raising, lowering, zoom, panning over foliage); the AMD/Intel path forced on the RTX 3060 with `ForceNonNvidia=1` under `[Advanced]`.
+
+### Known issues
+- **AMD and Intel cards are not tested on real hardware** yet, only through the forced test on an NVIDIA card. Reports welcome.
+- **FSR3 is 2x only,** and Reflex is unavailable with it.
+- **HDR with a 16-bit (scRGB) back buffer:** frame generation gets no HUD-less image there, so the HUD can ghost. HDR10 and 10-bit SDR are covered.
+- **The Bio Scope Lens fix is experimental.** The redrawn reticle sits at the centre of the screen and doesn't follow the lens's small sway and tilt.
+- **ReShade installed as `dxgi.dll`** breaks DLSS-G pacing (Streamline reports the window as not focused). Install ReShade as `d3d12.dll` instead.
+- **Ultra Quality and Custom** run DLSS in its Quality mode at your resolution; only the mode name DLSS reports differs.
+- **Scopes still cost some speed:** raising one takes one slower frame, and the frame rate is lower while a scope is up, since the game draws the scope's view as well.
+- **DLSS 5 filters the main screen only:** not the picture inside scopes, cutscene textures or the character model viewer.
+- **REFramework D2D plugin:** the released `reframework-d2d.dll` crashes with frame generation on. A fixed build of the plugin is available with the mod; otherwise remove it, or turn frame generation off.
+- **One frame without generated frames** can happen when the inventory opens.
+- **Dynamic frame gen** on the RTX 3060 with MFG Unlocker settles on whole multipliers only (1x, 2x, 3x, 6x), and V-Sync forced in the NVIDIA settings makes it ignore the target.
+
+**Having a problem?** Send `reframework\data\re4dlss\re4dlss.log` from your game folder right after it happens, since the log is reset every time the game starts. If the panel says **Mode: Compatibility**, the log says why. If the game crashes with frame generation, copy the log first, then set `FrameGen=0` under `[FrameGen]` in `reframework\data\re4dlss\re4dlss.ini`.
 
 ## v0.4.2
 
