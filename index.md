@@ -11,10 +11,68 @@ Generation with NVIDIA Reflex.
 
 **Download:** [RE4 DLSS on Nexus Mods](https://www.nexusmods.com/residentevil42023/mods/7795)
 
-Newest version first. Versions: [v0.5.0](#v050) · [v0.4.2](#v042) · [v0.4.1](#v041) · [v0.4.0](#v040) ·
-[v0.3.5](#v035) · [v0.3.4](#v034) · [v0.3.3](#v033) · [v0.3.2](#v032) · [v0.3.1](#v031) · [v0.3.0](#v030) ·
-[v0.2.1](#v021) · [v0.2.0](#v020) · [v0.1.5](#v015) · [v0.1.4](#v014) · [v0.1.3](#v013) · [v0.1.2](#v012) ·
-[v0.1.1](#v011) · [v0.1.0](#v010)
+Newest version first. Versions: [v0.6.0](#v060) · [v0.5.0](#v050) · [v0.4.2](#v042) · [v0.4.1](#v041) ·
+[v0.4.0](#v040) · [v0.3.5](#v035) · [v0.3.4](#v034) · [v0.3.3](#v033) · [v0.3.2](#v032) · [v0.3.1](#v031) ·
+[v0.3.0](#v030) · [v0.2.1](#v021) · [v0.2.0](#v020) · [v0.1.5](#v015) · [v0.1.4](#v014) · [v0.1.3](#v013) ·
+[v0.1.2](#v012) · [v0.1.1](#v011) · [v0.1.0](#v010)
+
+## v0.6.0
+
+*2026-11-15*
+
+### Install / update
+- **Update zip** (`re4r-dlss-v0.6.0-update.zip`): extract into the RE4 game folder and replace the existing files when asked. It holds only the mod's plugin and panel. **AMD FSR upscaling and AMD FSR frame generation also need the new AMD FSR files** (`reframework\plugins\re4dlss_fsr4`), which come with the Fluffy zip's **AMD FSR files** add-on.
+- **Fluffy Mod Manager** (`re4r-dlss-v0.6.0-fluffy.zip`): the complete package. The main entry is renamed **RE4R DLSS + FSR4 (Main)**: **remove the old "RE4R DLSS + FSR3 (Main)" first**, then install the new one and turn on the add-ons for your card (press **+** on the main entry):
+  - AMD Radeon / Intel Arc: **AMD FSR files**
+  - NVIDIA RTX: **NVIDIA DLSS files** (AMD FSR files optional)
+  - RTX 20 / 30 / 40: also **MFG Unlocker** for DLSS frame generation
+
+Your settings are kept: the settings file is updated once (see *Settings* below).
+
+### What's new
+
+### AMD FSR upscaling (new)
+- **Upscaler: AMD FSR.** AMD FSR runs in DLSS's place on any DirectX 12 card. AMD's runtime picks the version for your card: **FSR 4** on Radeon RX 9000, and on RX 7000 / RX 6000 with a recent Adrenalin driver (FSR 4.1); **FSR 3.1** on every other card, NVIDIA and Intel included.
+- The panel shows which one runs (for example **Running: FSR 3.1.6**, or **FSR 4, machine learning**).
+- AMD FSR measures exposure itself and never gets the game's exposure texture: that texture crashed FSR 4 on a Radeon in another RE4 mod.
+- Scopes and cutscene textures can use AMD FSR too (the **Scope** choices name it).
+
+### AMD FSR frame generation
+- **Updated to AMD's FSR SDK 2.4.0** (from FSR 3.1.4): **FSR 4 frame generation** (machine learning) on Radeon RX 9000, **FSR 3.1.6** on every other card. Still 2x.
+- **The HUD stays out of generated frames,** also in cutscenes and at a render resolution below your screen's (for example 1680x1050 on a 1080p screen). Before, the HUD could ghost there.
+- The provider is now called **AMD FSR 3.1 / FSR 4**, and the panel says which version runs.
+- The old FSR 3.1.4 files (`reframework\plugins\re4dlss_fsr`) are no longer used.
+
+### Lower input lag (new)
+- **NVIDIA Reflex without frame generation.** Reflex now works with frame generation off, and with AMD FSR frame generation on NVIDIA cards, through the NVIDIA driver. Off / On / On + Boost, with the same **Reflex timing** choice as with DLSS-G.
+- **AMD Anti-Lag 2** on Radeon RX 5000 or newer (Adrenalin 24.7.1+), with or without frame generation, plus an optional frame cap from AMD's driver. On by default.
+- Both are in a new **Latency** section of the panel. It shows NVIDIA Reflex on NVIDIA cards and AMD Anti-Lag 2 on Radeon cards.
+
+### Debug logging
+- **Performance log is now Debug logging** (Tools). Off by default. With it on, `re4dlss.log` also gets video memory use, what runs (upscaler, frame generation, latency) and every change of it. With it on at game start, it also gets the driver's record of GPU work when the GPU crashes.
+- **Always written now, even with it off:** a short system report (Windows, CPU, RAM, graphics card and driver, displays, the mod's runtime files, your settings), crashes (where and how), the GPU dropping out, and whether the game closed normally. A crash report no longer needs a second try.
+
+### Panel
+- The **F9** button names what it switches: **Switch DLSS / Game FSR 2**, or **Switch FSR 3.1.6 / Game FSR 2** when AMD FSR is your upscaler.
+- The DLSS-G note for RTX 20 / 30 cards now points to MFG Unlocker.
+- Fixed: with the frame multiplier at **Off**, the **NVIDIA Reflex** choice was saved one step too high (Off as On, On as On + Boost).
+
+### Settings
+- Reflex and Anti-Lag 2 settings moved from `[FrameGen]` to a new `[Latency]` section, and `[FrameGen]` now leads with frame generation on/off and the provider. The file is rewritten once with your values kept; the old one is saved as `re4dlss.ini.v15.bak`.
+
+**Tested on:** an RTX 3060 at 1920x1080 (SDR):
+- In game: AMD FSR 3.1 upscaling and AMD FSR 3.1.6 frame generation (gameplay, cutscenes and 1680x1050), Reflex through the driver with AMD FSR frame generation, and live upscaler and render scale switches.
+- Offline: AMD's FSR SDK 2.4.0 on the RTX 3060, Reflex through the NVIDIA driver, and the settings file update on a real settings file.
+
+### Known issues
+- **FSR 4 and AMD Anti-Lag 2 are not tested on real Radeon cards** yet, only with simulated AMD runtimes and drivers. Reports welcome: turn on **Debug logging** and send the log.
+- **AMD FSR frame generation is 2x only.** AMD's multi frame generation isn't released yet.
+- **Debug logging's GPU crash details** need it on when the game starts.
+- **Fluffy users:** the renamed main entry is a new mod for Fluffy. Remove the old "RE4R DLSS + FSR3 (Main)" entry, or the two overwrite each other's files.
+- **ReShade installed as `dxgi.dll`** breaks DLSS-G pacing (Streamline reports the window as not focused). Install ReShade as `d3d12.dll` instead.
+- Earlier known issues still apply (HDR with a 16-bit scRGB back buffer, the REFramework D2D plugin with frame generation): see v0.5.0.
+
+**Having a problem?** Turn on **Debug logging** (Tools), reproduce it, then send `reframework\data\re4dlss\re4dlss.log` from your game folder right away, since the log is reset every time the game starts.
 
 ## v0.5.0
 
