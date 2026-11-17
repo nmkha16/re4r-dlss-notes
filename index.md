@@ -11,10 +11,116 @@ Generation with NVIDIA Reflex.
 
 **Download:** [RE4 DLSS on Nexus Mods](https://www.nexusmods.com/residentevil42023/mods/7795)
 
-Newest version first. Versions: [v0.6.0](#v060) · [v0.5.0](#v050) · [v0.4.2](#v042) · [v0.4.1](#v041) ·
-[v0.4.0](#v040) · [v0.3.5](#v035) · [v0.3.4](#v034) · [v0.3.3](#v033) · [v0.3.2](#v032) · [v0.3.1](#v031) ·
-[v0.3.0](#v030) · [v0.2.1](#v021) · [v0.2.0](#v020) · [v0.1.5](#v015) · [v0.1.4](#v014) · [v0.1.3](#v013) ·
-[v0.1.2](#v012) · [v0.1.1](#v011) · [v0.1.0](#v010)
+Newest version first. Versions: [v0.7.0](#v070) · [v0.6.0](#v060) · [v0.5.0](#v050) · [v0.4.2](#v042) ·
+[v0.4.1](#v041) · [v0.4.0](#v040) · [v0.3.5](#v035) · [v0.3.4](#v034) · [v0.3.3](#v033) · [v0.3.2](#v032) ·
+[v0.3.1](#v031) · [v0.3.0](#v030) · [v0.2.1](#v021) · [v0.2.0](#v020) · [v0.1.5](#v015) · [v0.1.4](#v014) ·
+[v0.1.3](#v013) · [v0.1.2](#v012) · [v0.1.1](#v011) · [v0.1.0](#v010)
+
+## v0.7.0
+
+*2026-11-17*
+
+### Install / update
+- **Update zip** (`re4r-dlss-v0.7.0-update.zip`): extract into the RE4 game folder and replace the existing files when asked. It holds the mod's plugin and panel. The AMD FSR files are the same as in v0.6.0: no need to install them again.
+- **Fluffy Mod Manager** (`re4r-dlss-v0.7.0-fluffy.zip`): the complete package, same entries as v0.6.0 (**RE4R DLSS + FSR4 (Main)** plus the add-ons for your card).
+- **ANR FG** comes as a new Fluffy add-on, **ANR FG frame generation (experimental)**, included with Apex Compute's permission: turn it on to try ANR FG. With the update zip, download ANR's add-on package from [github.com/apex-compute/ANR](https://github.com/apex-compute/ANR) and put its **Apex Neural Rendering FG** folder, as it is, in `reframework\plugins` in the game folder.
+
+Your settings are kept.
+
+### What's new
+
+### ANR FG frame generation (new, experimental)
+- The mod can now use **ANR FG** (Apex Neural Rendering's frame generation) to make the generated frames. It's experimental: please try it and tell us how it looks and runs.
+- **Cards:** GeForce RTX 20 / 30 / 40 / 50 and GTX 16, Radeon RX 5000 and newer (Vega reported working), and Intel Arc. GeForce GTX 10 and older, and Radeon RX 400 / 500 and older, can't run it: ANR has no support for them and has said it doesn't plan to add GTX 10 (Pascal).
+
+### Frame generation settings: two dropdowns
+- **Pacing:** who presents the frames and keeps them evenly spaced. Applies after a game restart.
+  - **DLSS-G (NVIDIA)**: as before.
+  - **AMD FSR**: as before.
+  - **Universal (experimental)**: new, see below. Listed once ANR FG is installed.
+- **Frame generator:** who makes the generated frames. **Switches live, no restart.**
+  - With **AMD FSR** pacing: **AMD FSR** (FSR 4 / FSR 3.1) or **ANR FG**, at 2x.
+  - With **DLSS-G** pacing: **NVIDIA DLSS-G** or **ANR FG**, up to the multiplier DLSS-G allows on your card. ANR FG is set up when the game starts with it chosen; after that the two switch live.
+- **Frames from:** shows which generator is making the frames right now.
+
+### Universal pacing (new, experimental)
+- The mod's own pacer, with ANR FG making the frames: **up to 6x on any card ANR FG supports**, Radeon and GTX 16 included. Before, only DLSS-G went past 2x.
+- **Universal multiplier** (Off, 2x to 6x) applies live.
+- Above 2x, turn the game's **V-Sync and frame limit off** and let your screen's refresh rate (or VRR) take the extra frames. With V-Sync on, the rendered frame rate is held to the refresh rate divided by the multiplier (144 Hz at 4x: 36 rendered fps).
+- **NVIDIA Reflex** works with it. **AMD Anti-Lag 2** is told which frames are generated, so its timing follows the rendered frames.
+
+### The panel says when ANR FG can't run
+- **ANR FG isn't installed:** the dropdown keeps the current generator and says why: "ANR FG isn't installed, so AMD FSR keeps making the frames". It also says where to put the folder.
+- **Your card can't run ANR FG:** "This card (...) cannot run Frame Generation with ANR FG", and which cards it needs. With AMD FSR or DLSS-G pacing, that generator keeps making the frames. With Universal there is no frame generation (real frames only), and the multiplier is hidden.
+
+**Settings file** (`[FrameGen]` in `re4dlss.ini`; the panel sets these for you)
+- `FGProvider`:
+  - `2` = ANR FG with AMD FSR pacing
+  - `3` = ANR FG with DLSS-G pacing
+  - `4` = Universal
+  - `0` (DLSS-G) and `1` (AMD FSR) are unchanged.
+- `ANRPath` (optional): ANR FG's folder or DLL if it's somewhere else, as a full path or from the game folder.
+
+### Fixes
+- **Radeon: the HUD is now kept out of FSR's generated frames.** On Radeon cards the mod couldn't find the screen's brightness, so frame generation ran with the HUD interpolated, and it smeared and wobbled while the camera moved.
+- **Fixed a crash with DLSS + AMD FSR frame generation in the first seconds after loading**, while full mode was still starting. A Radeon could hit it too.
+
+**Tested on:** an RTX 3060 at 1920x1080 (SDR):
+- **In game, ANR FG with AMD FSR pacing:** 2x with no failures, and the live switch between AMD FSR and ANR FG.
+- **In game, ANR FG with DLSS-G pacing:** more than 5,000 frames at 2x and 6x, and the live switch between NVIDIA DLSS-G and ANR FG.
+- **In game, Universal:**
+  - 2x: about 146 → 292 fps
+  - 4x: about 68 → 271 fps
+  - 6x: about 60 → 360 fps
+
+  Frame spacing held to within half a millisecond; Reflex on.
+- **Offline:**
+  - Universal at 2x to 6x
+  - ANR FG with AMD FSR pacing
+  - spotting cards ANR FG can't run on (23 card names)
+  - the panel with ANR FG installed, not installed, and on a card that can't run it
+  - the full test set
+
+### Known issues
+- **ANR FG is experimental and made by Apex Compute, not this mod.** Ghosting or other image problems in generated frames may be ANR FG's own: compare with NVIDIA DLSS-G or AMD FSR as the generator, and report it to [ANR's issues](https://github.com/apex-compute/ANR/issues) if only ANR FG shows it.
+- **Not tested on a real Radeon, Intel Arc or GTX 16 card yet**, so this covers Universal, Anti-Lag 2 with Universal, and both Radeon fixes. On a GTX 16, ANR FG costs more per generated frame than on an RTX card, so high multipliers may not pay off.
+- **The card check is by name** (plus ANR's own start-up answer). If the panel says your supported card can't run ANR FG, please send the log.
+- **Pacing changes need a game restart.** The generator switches live, except that ANR FG behind DLSS-G needs one restart with it chosen first.
+- Earlier known issues still apply: see **Also new since v0.6.0** below, and v0.6.0.
+
+### Also new since v0.6.0 (v0.6.1)
+
+v0.6.1 wasn't released here on its own, so its changes come with this version too.
+
+### AMD Radeon: FSR now runs
+- **Fixed: on Radeon cards the mod never took over the game's upscaler.** AMD FSR (FSR 4 / FSR 3.1) did nothing and the picture stayed the game's own FSR 2, so FSR 2 and FSR 4 looked the same (seen on an RX 6600). The mod now finds the game's FSR 2 on any graphics card, however the driver lays out the game's shaders.
+- The mod also reads FSR 2's settings when the driver keeps them in video memory, as seen on Radeon cards in another RE4 mod.
+
+### Panel tells you when the mod isn't working
+- **New warning:** "[!] Not attached: the game's FSR 2 runs, but the mod's DLSS / FSR hasn't taken it over". It shows when the mod's upscaler hasn't made the picture for 5 seconds while the game's FSR 2 runs, and asks for the log.
+- **AMD FSR** now shows its full status, like DLSS: the render size (for example **FSR 3.1.6 59%: 1129x635 -> 1920x1080**) and the mode. The upscaler line says **Running** only while AMD FSR upscales, and **Loaded, not upscaling yet** otherwise.
+- The first seconds after start now say **Mode: starting (code search running)** instead of a false "address mismatch".
+- With AMD Anti-Lag 2 on, the debug log now shows its status instead of "Reflex unavailable".
+
+**Compatibility mode** (used when full mode can't start, or with `IntegratedDLSS=0`)
+- **Frame generation works there now** (DLSS-G and AMD FSR frame generation), from the game's own FSR 2 depth and motion. The panel says **Mode: compatibility, slow path** and **Frame generation: on, slow path**.
+- **Bio scope:** the main screen no longer smears over foliage while the bio scope is up (follows the **Bio Scope Lens fix** setting, on by default).
+- Options that only work in full mode are out of the way: the **Scope** upscaler choices are hidden, the bio scope fixes on the Fixes page are replaced by a short note, and **Sharpness** is greyed out (compatibility mode keeps FSR 2's own sharpening). The **Scope stutter fix** still works.
+- The Fixes page notes the fix for a flickering or jumping bio scope there: REFramework's **Scope Tweaks + Scope Interlaced Rendering** (Graphics > Scope Tweaks).
+
+### Frame generation starts sooner
+- In full mode, frame generation now also runs during the first seconds after loading, while full mode is still starting (before, it waited for full mode).
+
+### Hardware Cursor (new, Fixes page, off by default)
+- In menus (attache case, map, files, options) Windows draws the mouse cursor instead of the game. It moves at your mouse's rate whatever the fps, so it doesn't feel heavy with frame generation. Shows the standard Windows arrow; hovering and clicking work as before.
+
+### Known issues from v0.6.1
+- **The Radeon fixes are not tested on a real Radeon card yet.** Radeon players: please turn on **Debug logging** (Tools), play a minute with AMD FSR as the upscaler, and send the log.
+- **Bio Scope Lens fix with REFramework's First Person Mode:** the fix can't tell when the bio scope is raised there, so the lens isn't corrected and foliage in it blurs while panning. The fix stays experimental.
+- **The bio scope blurs over foliage while zooming** (panning is fine with the Bio Scope Lens fix).
+- **Turning the scope options on in the panel** after starting the game with them off: the Bio Scope Lens fix may only work after a game restart.
+
+**Having a problem?** Turn on **Debug logging** (Tools), reproduce it, then send `reframework\data\re4dlss\re4dlss.log` from your game folder right away, since the log is reset every time the game starts.
 
 ## v0.6.0
 
