@@ -11,10 +11,33 @@ Generation with NVIDIA Reflex.
 
 **Download:** [RE4 DLSS on Nexus Mods](https://www.nexusmods.com/residentevil42023/mods/7795)
 
-Newest version first. Versions: [v0.7.0](#v070) · [v0.6.0](#v060) · [v0.5.0](#v050) · [v0.4.2](#v042) ·
-[v0.4.1](#v041) · [v0.4.0](#v040) · [v0.3.5](#v035) · [v0.3.4](#v034) · [v0.3.3](#v033) · [v0.3.2](#v032) ·
-[v0.3.1](#v031) · [v0.3.0](#v030) · [v0.2.1](#v021) · [v0.2.0](#v020) · [v0.1.5](#v015) · [v0.1.4](#v014) ·
-[v0.1.3](#v013) · [v0.1.2](#v012) · [v0.1.1](#v011) · [v0.1.0](#v010)
+Newest version first. Versions: [v0.7.1](#v071) · [v0.7.0](#v070) · [v0.6.0](#v060) · [v0.5.0](#v050) ·
+[v0.4.2](#v042) · [v0.4.1](#v041) · [v0.4.0](#v040) · [v0.3.5](#v035) · [v0.3.4](#v034) · [v0.3.3](#v033) ·
+[v0.3.2](#v032) · [v0.3.1](#v031) · [v0.3.0](#v030) · [v0.2.1](#v021) · [v0.2.0](#v020) · [v0.1.5](#v015) ·
+[v0.1.4](#v014) · [v0.1.3](#v013) · [v0.1.2](#v012) · [v0.1.1](#v011) · [v0.1.0](#v010)
+
+## v0.7.1
+
+*2026-11-18*
+
+### Install / update
+- **Update zip** (`re4r-dlss-v0.7.1-update.zip`): extract into the RE4 game folder and replace the existing files when asked. It holds the mod's plugin and panel. The AMD FSR, NVIDIA and ANR FG files are the same as in v0.7.0: no need to install them again.
+- **Fluffy Mod Manager** (`re4r-dlss-v0.7.1-fluffy.zip`): the complete package, same entries as v0.7.0 (**RE4R DLSS + FSR4 (Main)** plus the add-ons for your card).
+
+Your settings are kept.
+
+### What's new
+
+### AMD Radeon: the HUD stays out of generated frames (fixed for real)
+- **Fixed: on Radeon cards, frame generation still ran with the HUD interpolated.** v0.7.0 tried to fix this, but on a real Radeon the mod still couldn't read the screen's brightness. The HUD then smeared and wobbled in the generated frames while the camera moved. It now works with **AMD FSR** frame generation and **ANR FG** (AMD FSR or Universal pacing).
+- The mod now takes the brightness from where the game sets it up. Once that has worked for a second, it switches to a cheaper way of finding it, so it costs less CPU. If the cheaper way doesn't work on your card, it keeps the first way.
+
+### Panel
+- **Enable frame generation** can now be ticked in **compatibility mode**, when full mode's game code wasn't found ("address mismatch"). Frame generation then uses the game's own FSR 2 depth and motion (the slow path), as v0.7.0 already allowed; before, the panel greyed the checkbox out. The checkbox says **(slow path: full mode's game code not found)** then, and is greyed out with **(address mismatch)** only when the game's camera code is missing too.
+- The yellow **"not an NVIDIA card"** line now only shows when it matters: when DLSS is still chosen, when you just picked DLSS, or when AMD FSR isn't installed. With AMD FSR or Game FSR 2 chosen, it's gone.
+- With frame generation not loaded this session, the panel no longer shows a lone **"off"** line or a **multiplier** you can't use, and the duplicate "relaunch" line is gone. When you tick the checkbox, one line says to restart the game.
+- **"[!] ... is off: the game's upscaler is not FSR 2"** now names what you chose (DLSS, AMD FSR, or frame generation's input with Game FSR 2) instead of always saying DLSS.
+- The **Render quality** and **Resolution** tooltips no longer talk only about DLSS. On a card that isn't NVIDIA's, the **Bio Scope Lens fix** says it needs DLSS (an NVIDIA RTX card).
 
 ## v0.7.0
 
