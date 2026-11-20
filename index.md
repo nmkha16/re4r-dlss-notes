@@ -11,10 +11,41 @@ Generation with NVIDIA Reflex.
 
 **Download:** [RE4 DLSS on Nexus Mods](https://www.nexusmods.com/residentevil42023/mods/7795)
 
-Newest version first. Versions: [v0.7.1](#v071) · [v0.7.0](#v070) · [v0.6.0](#v060) · [v0.5.0](#v050) ·
-[v0.4.2](#v042) · [v0.4.1](#v041) · [v0.4.0](#v040) · [v0.3.5](#v035) · [v0.3.4](#v034) · [v0.3.3](#v033) ·
-[v0.3.2](#v032) · [v0.3.1](#v031) · [v0.3.0](#v030) · [v0.2.1](#v021) · [v0.2.0](#v020) · [v0.1.5](#v015) ·
-[v0.1.4](#v014) · [v0.1.3](#v013) · [v0.1.2](#v012) · [v0.1.1](#v011) · [v0.1.0](#v010)
+Newest version first. Versions: [v0.7.2](#v072) · [v0.7.1](#v071) · [v0.7.0](#v070) · [v0.6.0](#v060) ·
+[v0.5.0](#v050) · [v0.4.2](#v042) · [v0.4.1](#v041) · [v0.4.0](#v040) · [v0.3.5](#v035) · [v0.3.4](#v034) ·
+[v0.3.3](#v033) · [v0.3.2](#v032) · [v0.3.1](#v031) · [v0.3.0](#v030) · [v0.2.1](#v021) · [v0.2.0](#v020) ·
+[v0.1.5](#v015) · [v0.1.4](#v014) · [v0.1.3](#v013) · [v0.1.2](#v012) · [v0.1.1](#v011) · [v0.1.0](#v010)
+
+## v0.7.2
+
+*2026-11-20*
+
+### Install / update
+- **Update zip** (`re4r-dlss-v0.7.2-update.zip`): extract into the RE4 game folder and replace the existing files when asked. Besides the mod's plugin and panel, it holds two new files: **nvngx_dlssd.dll** (NVIDIA's Ray Reconstruction, in the game folder) and **amd_fidelityfx_denoiser_dx12.dll** (AMD's Ray Regeneration, in `reframework\plugins\re4dlss_fsr4`). The other NVIDIA, AMD FSR and ANR FG files are the same as in v0.7.1.
+- **Fluffy Mod Manager** (`re4r-dlss-v0.7.2-fluffy.zip`): the complete package, same entries as v0.7.1 (**RE4R DLSS + FSR4 (Main)** plus the add-ons for your card).
+
+Your settings are kept. Both new features start **off**.
+
+### What's new
+
+### Ray tracing denoisers (experimental)
+
+The game's own ray tracing denoisers smear and boil, most of all in reflections. A new panel page can replace them with NVIDIA's or AMD's denoiser. The page is named after your card: **Ray Reconstruction (NVIDIA)** or **Ray Regeneration (AMD)**. Both need the game's **Ray Tracing** on in its graphics menu. Without it, the upscaler runs as usual.
+
+- **DLSS Ray Reconstruction (NVIDIA RTX):** NVIDIA's denoiser and upscaler in one. It takes over from DLSS Super Resolution on the main view while the game ray traces, so the upscaler must be **DLSS**. It costs more than DLSS alone: about 6 ms on an RTX 3060 at 1080p.
+  - **Model preset:** NVIDIA's default, or D, E or F.
+  - **Sharpness** still applies on top.
+  - If Ray Reconstruction can't start, DLSS Super Resolution runs instead, and the status line says why.
+- **AMD FSR Ray Regeneration (Radeon RX 9000 or later, Windows 11):** AMD's denoiser on the game's ray-traced reflections. It cleans them at the size the game traces them, before the game lights the image with them, so it works with **every upscaler** (DLSS, AMD FSR, Game FSR 2). On cards AMD's runtime doesn't support, the status line says so and the game's own denoisers stay.
+- **Ray-traced GI (RE4R Graphics Enhancement):** both pages have **Keep the game's GI denoiser**, **on** by default.
+  - **On:** the game's own GI denoiser cleans the bounced light, which stays stable.
+  - **Off:** Ray Reconstruction or Ray Regeneration denoises the GI too. This can flicker into white patches, because the game traces few GI rays.
+
+### DLSS 5
+- **New: Round size to 8 px** (under Resolution and layers, on by default). When DLSS 5's **Resolution** slider is below 100%, the size DLSS 5 runs at is rounded to a multiple of 8 pixels. At in-between percentages (e.g. 1080p at 50, 70 or 90%), the result was a little softer before. Turn it off and on to compare. No effect at 100%.
+
+### Panel
+- **Fixed: the DLSS 5 page could break the whole REFramework panel** with "Missing TreePop()" / "Calling PopID() too many times" errors while you hovered the Resolution options. A tooltip had a `%` sign that REFramework passed on as a formatting code, which also counted as a crash in the log. All tooltips and coloured lines are safe now.
 
 ## v0.7.1
 
