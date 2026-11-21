@@ -47,6 +47,10 @@ The game's own ray tracing denoisers smear and boil, most of all in reflections.
 ### Panel
 - **Fixed: the DLSS 5 page could break the whole REFramework panel** with "Missing TreePop()" / "Calling PopID() too many times" errors while you hovered the Resolution options. A tooltip had a `%` sign that REFramework passed on as a formatting code, which also counted as a crash in the log. All tooltips and coloured lines are safe now.
 
+### ANR FG
+- **Fixed: ANR FG with AMD FSR or Universal pacing smeared moving things**, then the image jumped at each real frame. The mod gave ANR FG its motion in the wrong unit, so every generated frame was a blend of two real frames. Generated frames now follow the motion, like with DLSS-G's pacing.
+- **Keep the shown frame rate below your monitor's refresh rate** with ANR FG outside DLSS-G, or the image jumps: the screen drops the frames above it. With AMD FSR pacing (2x) that means a real frame rate under half the refresh rate (under 72 fps at 144 Hz).
+
 ## v0.7.1
 
 *2026-11-18*
